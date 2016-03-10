@@ -13,6 +13,7 @@
 #include "Timing.h"
 #include "Dragonfly_types.h"
 #include "internal/UPipe.h"
+#include "mbgdevio_import.h"
 
 #include <stdio.h>
 #include <string>
@@ -92,6 +93,13 @@ private:
 	double      m_StartTime;
 	int         m_Pid;
 	int         m_TimerCount;
+        // Mainberg Time Code add on managaement
+        int                  m_use_time_card;
+        int                  m_timeReceiverInstalled;
+        bool                 m_timeReceiverOpen;
+        bool                 m_mbg_poll_thread_active;
+        MBG_DEV_HANDLE       m_mbg_dh;
+        MBG_POLL_THREAD_INFO m_mbg_poll_thread;
 
 	#if (DRAGONFLY_PROFILE == TRUE)
 		int			     m_NumProfiledMsgs;
@@ -113,6 +121,9 @@ protected:
 	WaitForAcknowledgement(double timeout = -1, CMessage* rcvMsg = NULL); // Waits for MT_ACKNOWLEDGE for up to timeout seconds
 
 	int
+
+
+
 	SendMessage( CMessage *M, UPipe *pOutputPipe, MODULE_ID dest_mod_id = 0, HOST_ID dest_host_id = 0);
 
 	int
@@ -134,7 +145,10 @@ public:
 
 	Dragonfly_Module( );
 
-	Dragonfly_Module( MODULE_ID ModuleID, HOST_ID HostID);
+	Dragonfly_Module( MODULE_ID ModuleID, HOST_ID HostID );
+
+        // new version of constructor specifying if a meinberg time card should be used
+        Dragonfly_Module( MODULE_ID ModuleID, HOST_ID HostID, int use_time_card ); 
 
 	~Dragonfly_Module( );
 
@@ -143,7 +157,7 @@ public:
 	//contains code executed by the dtor
 	
 	void
-	InitVariables( MODULE_ID ModuleID, HOST_ID HostID);
+	InitVariables( MODULE_ID ModuleID, HOST_ID HostID, int use_time_card=0 );
 
 	int
 	ConnectToMMM( int logger_status=0, int read_dd_file=0, int daemon_status=0);

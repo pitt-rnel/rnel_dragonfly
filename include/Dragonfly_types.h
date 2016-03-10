@@ -23,18 +23,21 @@ typedef int MSG_COUNT;
 
 // Header fields for all messages passed through Dragonfly
 #define DF_MSG_HEADER_FIELDS \
-	MSG_TYPE	msg_type; \
-	MSG_COUNT	msg_count; \
-	double	send_time; \
-	double	recv_time; \
-	HOST_ID		src_host_id; \
-	MODULE_ID	src_mod_id; \
-	HOST_ID		dest_host_id; \
-	MODULE_ID	dest_mod_id; \
-	int			num_data_bytes; \
-	int			remaining_bytes; \
-	int			is_dynamic; \
-	int			reserved
+	MSG_TYPE     msg_type; \
+	MSG_COUNT    msg_count; \
+	double	     send_time; \
+	double	     recv_time; \
+	HOST_ID	     src_host_id; \
+	MODULE_ID    src_mod_id; \
+	HOST_ID	     dest_host_id; \
+	MODULE_ID    dest_mod_id; \
+	int          num_data_bytes; \
+	int          remaining_bytes; \
+	int          is_dynamic; \
+	int          reserved; \
+        unsigned int utc_seconds; \
+        unsigned int utc_fraction
+
 // msg_type - Message type ID
 // msg_count - Source message count (per source, starting from 1)
 // send_time - Time at source when message sent (Seconds since 0:00:00 on Jan 1, 1970)
@@ -49,17 +52,20 @@ typedef int MSG_COUNT;
 // is_dynamic - if true, then message data is a serialized form of Dynamic Data.
 // reserved - for 64-bit alignment (if you ever change the fields, remember they have to be
 //	          16-, 32- and 64-bit aligned, i.e. no single field crosses a 2-, 4-, or 8-byte boundary)
+// utc_seconds - if Meinberg time card present/enabled: seconds since 1970 (UTC) 
+// utc_hex_frac - if Meinberg time card present/enabled: fractions of second ( 0xFFFFFFFF == 0.9999.. sec), 
+//                divide by 0xFFFFFFFF to get   42 // msg_count - Source message count (per source, starting from 1)
 
 // Header for messages passed through Dragonfly
 typedef struct {
-	DF_MSG_HEADER_FIELDS;
+  DF_MSG_HEADER_FIELDS;
 } DF_MSG_HEADER;
 
 #define MAX_CONTIGUOUS_MESSAGE_DATA 9000
 
 typedef struct {
-	DF_MSG_HEADER_FIELDS;
-	char data[MAX_CONTIGUOUS_MESSAGE_DATA];
+  DF_MSG_HEADER_FIELDS;
+  char data[MAX_CONTIGUOUS_MESSAGE_DATA];
 } DF_MESSAGE;
 
 
@@ -82,7 +88,7 @@ typedef char STRING_DATA[];   //message data type for variable length string mes
 
 // Messages sent by MessageManager to modules
 #define MT_EXIT            0
-#define MT_KILL			   1
+#define MT_KILL		   1
 #define MT_ACKNOWLEDGE     2
 #define MT_FAIL_SUBSCRIBE  6
 typedef struct { MODULE_ID mod_id; short reserved; MSG_TYPE msg_type;} MDF_FAIL_SUBSCRIBE;
