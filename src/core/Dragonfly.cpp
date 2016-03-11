@@ -167,8 +167,8 @@ CMessage::Set( MSG_TYPE mt, void *pData, int num_bytes)
     remaining_bytes = -1;
     is_dynamic = 0;
     reserved = 0;
-                utc_seconds = 0;
-                utc_fraction = 0;
+    utc_seconds = 0;
+    utc_fraction = 0;
 
     return SetData( pData, num_bytes);
   } CATCH_and_THROW( "CMessage::Set( MSG_TYPE mt, void *pData, int num_bytes)");
@@ -303,10 +303,10 @@ CMessage::GetHeader(void)
     DF_MSG_HEADER header;
     memset( &header, 0, sizeof( header));
 
-    header.dest_host_id = dest_host_id;
-    header.dest_mod_id  = dest_mod_id;
-    header.msg_count    = msg_count;
-    header.msg_type     = msg_type;
+    header.dest_host_id    = dest_host_id;
+    header.dest_mod_id     = dest_mod_id;
+    header.msg_count       = msg_count;
+    header.msg_type        = msg_type;
     header.num_data_bytes  = num_data_bytes;
     header.recv_time       = recv_time;
     header.remaining_bytes = remaining_bytes;
@@ -314,8 +314,8 @@ CMessage::GetHeader(void)
     header.src_host_id     = src_host_id;
     header.src_mod_id      = src_mod_id;
     header.is_dynamic      = is_dynamic;
-                header.utc_seconds     = utc_seconds;
-                header.utc_fraction    = utc_fraction;
+    header.utc_seconds     = utc_seconds;
+    header.utc_fraction    = utc_fraction;
     
     return header;
   } CATCH_and_THROW( "CMessage::GetHeader(void)");
@@ -379,22 +379,20 @@ void Dragonfly_Module::InitVariables( MODULE_ID ModuleID, HOST_ID HostID, int us
     Gm_TimerThreadInfo.thread_exists = 0;
 
     // new support for meinberg timecard
-    #ifdef _UNIX_C
-      m_use_time_card = 0;
-    #else 
+    #ifdef _USE_MEINBERG
       m_use_time_card = use_time_card;
-    #endif
-    if (m_use_time_card) {
-      DWORD rc = mbg_import_mbgdevio_api();
-      if (rc == 0)
-        m_timeReceiverInstalled = fnc_mbg_find_devices();
+      if (m_use_time_card) {
+        DWORD rc = mbg_import_mbgdevio_api();
+        if (rc == 0)
+          m_timeReceiverInstalled = fnc_mbg_find_devices();
+        else
+          m_timeReceiverInstalled = 0;
+      }
       else
         m_timeReceiverInstalled = 0;
-    }
-    else
-      m_timeReceiverInstalled = 0;
-    m_timeReceiverOpen = false;
-    m_mbg_poll_thread_active = false;
+      m_timeReceiverOpen = false;
+      m_mbg_poll_thread_active = false;
+    #endif
 
     InitializeAbsTime();
   } CATCH_and_THROW( "void Dragonfly_Module::InitVariables( MODULE_ID ModuleID, HOST_ID HostID, int use_time_card)");
@@ -431,6 +429,7 @@ Dragonfly_Module::Cleanup( void)
       Gm_TimerThreadInfo.thread_exists = 0;
     }
 
+    #ifdef _USE_MEINBERG
     if (m_timeReceiverOpen)
     {
       // stop poll thread and close device
@@ -442,6 +441,7 @@ Dragonfly_Module::Cleanup( void)
       fnc_mbg_close_device(&m_mbg_dh);
       m_timeReceiverOpen = false;
     }
+    #endif
 
   
     if ( m_Connected) {
@@ -474,23 +474,25 @@ Dragonfly_Module::ConnectToMMM( char *server_name, int logger_status, int read_d
     _pipeClient = UPipeFactory::CreateClient( server_name);
     _MMpipe = _pipeClient->Connect();
 
-    if (m_use_time_card & m_timeReceiverInstalled && !m_timeReceiverOpen){ // open time card if one is installed
-      m_mbg_dh = fnc_mbg_open_device(0);
-      m_timeReceiverOpen = true;
-      //m_mbg_poll_thread = { { { { 0 } } } }; // this doesn't seem to work with mex
-      memset(&m_mbg_poll_thread, 0, sizeof(m_mbg_poll_thread));
-      int rc;
-      rc = fnc_mbg_xhrt_poll_thread_create(&m_mbg_poll_thread, m_mbg_dh, 0, 0); // open poll thread
-      if (rc == MBG_SUCCESS)
-        m_mbg_poll_thread_active = true;
-    }
-    else if (m_timeReceiverOpen && !m_mbg_poll_thread_active)
-    {
-      int rc;
-      rc = fnc_mbg_xhrt_poll_thread_create(&m_mbg_poll_thread, m_mbg_dh, 0, 0); // open poll thread
-      if (rc == MBG_SUCCESS)
-        m_mbg_poll_thread_active = true;
-    }
+    #ifdef _USE_MEINBERG
+      if (m_use_time_card & m_timeReceiverInstalled && !m_timeReceiverOpen){ // open time card if one is installed
+        m_mbg_dh = fnc_mbg_open_device(0);
+        m_timeReceiverOpen = true;
+        //m_mbg_poll_thread = { { { { 0 } } } }; // this doesn't seem to work with mex
+        memset(&m_mbg_poll_thread, 0, sizeof(m_mbg_poll_thread));
+        int rc;
+        rc = fnc_mbg_xhrt_poll_thread_create(&m_mbg_poll_thread, m_mbg_dh, 0, 0); // open poll thread
+        if (rc == MBG_SUCCESS)
+          m_mbg_poll_thread_active = true;
+      }
+      else if (m_timeReceiverOpen && !m_mbg_poll_thread_active)
+      {
+        int rc;
+        rc = fnc_mbg_xhrt_poll_thread_create(&m_mbg_poll_thread, m_mbg_dh, 0, 0); // open poll thread
+        if (rc == MBG_SUCCESS)
+          m_mbg_poll_thread_active = true;
+      }
+    #endif
 
 
     MDF_CONNECT data;
@@ -578,12 +580,14 @@ Dragonfly_Module::DisconnectFromMMM( void)
     m_Connected = 0;
     _pipeClient = NULL;
 
-    // stop time reciever thread
-    if (m_mbg_poll_thread_active)
-    {
-      fnc_mbg_xhrt_poll_thread_stop(&m_mbg_poll_thread);
-      m_mbg_poll_thread_active = false;
-    }
+    #ifdef _USE_MEINBERG
+      // stop time reciever thread
+      if (m_mbg_poll_thread_active)
+      {
+        fnc_mbg_xhrt_poll_thread_stop(&m_mbg_poll_thread);
+        m_mbg_poll_thread_active = false;
+      }
+    #endif
 
     return 1;
   } CATCH_and_THROW( "Dragonfly_Module::DisconnectFromMMM( void)");
@@ -778,14 +782,15 @@ Dragonfly_Module::SendMessage( CMessage *M, UPipe *output_pipe, MODULE_ID dest_m
     }
 
     // Assume that msg_type, num_data_bytes, data - have been filled in
-    M->msg_count   = m_MessageCount;
-    M->send_time   = GetAbsTime();
-    M->recv_time   = 0.0;
-    M->src_host_id = m_HostID;
-    M->src_mod_id  = m_ModuleID;
+    M->msg_count    = m_MessageCount;
+    M->send_time    = GetAbsTime();
+    M->recv_time    = 0.0;
+    M->src_host_id  = m_HostID;
+    M->src_mod_id   = m_ModuleID;
     M->dest_host_id = dest_host_id;
-    M->dest_mod_id = dest_mod_id; 
+    M->dest_mod_id  = dest_mod_id; 
 
+    #ifdef _USE_MEINBERG
     if (m_mbg_poll_thread_active) // get hi res utc time
     {
       PCPS_HR_TIME hrt;
@@ -796,6 +801,10 @@ Dragonfly_Module::SendMessage( CMessage *M, UPipe *output_pipe, MODULE_ID dest_m
         M->utc_fraction = hrt.tstamp.frac;
       }
     }
+    #else
+      M->utc_seconds  = 0;
+      M->utc_fraction = 0;
+    #endif
 
     int status = M->Send( output_pipe);
 
@@ -1064,10 +1073,10 @@ GetMyPriority()
 
 //The timer thread
 #ifdef _UNIX_C
-void *TimerThread(void* lpParam)
+  void *TimerThread(void* lpParam)
 #else
-DWORD WINAPI
-TimerThread( LPVOID lpParam)
+  DWORD WINAPI
+  TimerThread( LPVOID lpParam)
 #endif
 {
   TIMER_THREAD_INFO *info = (TIMER_THREAD_INFO*) lpParam;

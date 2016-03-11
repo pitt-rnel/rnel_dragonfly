@@ -251,16 +251,16 @@ CMessageManager::ProcessMessage( CMessage *M, UPipe *pSourcePipe)
       break;
 
     case MT_TIMING_TEST: 
-      //{
-      double upipe_recv_time = UPipeAutoServer::GetLatestRecvTime();
-      double mm_recv_time = GetAbsTime();
-      MDF_TIMING_TEST *pTimingData = (MDF_TIMING_TEST*) M->GetDataPointer();
-      AddTimingTestTimePoint( &(pTimingData->time[0]), upipe_recv_time);
-      AddTimingTestTimePoint( &(pTimingData->time[0]), mm_recv_time);
-      //for( int i = 0; i < 12; i++) printf("%.3f ", pTimingData->time[i]);
-      //printf("\n");
-      break;
-      //} 
+      {
+        double upipe_recv_time = UPipeAutoServer::GetLatestRecvTime();
+        double mm_recv_time = GetAbsTime();
+        MDF_TIMING_TEST *pTimingData = (MDF_TIMING_TEST*) M->GetDataPointer();
+        AddTimingTestTimePoint( &(pTimingData->time[0]), upipe_recv_time);
+        AddTimingTestTimePoint( &(pTimingData->time[0]), mm_recv_time);
+        //for( int i = 0; i < 12; i++) printf("%.3f ", pTimingData->time[i]);
+        //printf("\n");
+        break;
+      } 
 
     default:
       DEBUG_TEXT( "Nothing to do!");

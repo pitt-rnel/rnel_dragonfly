@@ -13,7 +13,9 @@
 #include "Timing.h"
 #include "Dragonfly_types.h"
 #include "internal/UPipe.h"
-#include "mbgdevio_import.h"
+#ifdef _WINDOWS_C
+  #include "mbgdevio_import.h"
+#endif
 
 #include <stdio.h>
 #include <string>
@@ -93,14 +95,16 @@ private:
   double      m_StartTime;
   int         m_Pid;
   int         m_TimerCount;
-       
-  // Mainberg Time Code add on managaement
-  int                  m_use_time_card;
-  int                  m_timeReceiverInstalled;
-  bool                 m_timeReceiverOpen;
-  bool                 m_mbg_poll_thread_active;
-  MBG_DEV_HANDLE       m_mbg_dh;
-  MBG_POLL_THREAD_INFO m_mbg_poll_thread;
+  
+  #ifdef _USE_MEINBERG     
+    // Mainberg Time Code add on managaement
+    int                  m_use_time_card;
+    int                  m_timeReceiverInstalled;
+    bool                 m_timeReceiverOpen;
+    bool                 m_mbg_poll_thread_active;
+    MBG_DEV_HANDLE       m_mbg_dh;
+    MBG_POLL_THREAD_INFO m_mbg_poll_thread;
+  #endif
 
   #if (DRAGONFLY_PROFILE == TRUE)
     int            m_NumProfiledMsgs;
