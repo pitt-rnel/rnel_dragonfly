@@ -18,6 +18,11 @@ TEMPLATE = lib
 DESTDIR=$$BASE_DIR/lib
 }
 
+macx {
+QMAKE_CC = clang
+QMAKE_CXX = clang++
+}
+
 win32 {
 TEMPLATE = lib
 CONFIG += console
