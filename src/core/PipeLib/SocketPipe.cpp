@@ -142,15 +142,22 @@ int RecvData( SocketHandle socket, char* buffer, int buffer_size)
       
     while(total_bytes < buffer_size){
       #ifdef _WINDOWS_C
-      res = recv(socket.id, buffer, bytes_left, 0);
-      if(res == SOCKET_ERROR)
+        res = recv(socket.id, buffer, bytes_left, 0);
+        if (res == SOCKET_ERROR)
+        {
+           throw UPipeClosedException( "Error in sending data through the socket", h_errno);
+        }
       #else
-      res = recv(socket.id, buffer, bytes_left, MSG_NOSIGNAL);
-      if(res == -1)
-      #endif
-      {
-        throw UPipeClosedException( "Error while receiving data from the socket");
-      }
+        #if __APPLE__
+          res = recv(socket.id, buffer, bytes_left, SO_NOSIGPIPE);
+        #else
+          res = recv(socket.id, buffer, bytes_left, MSG_NOSIGNAL);
+        #endif
+        if (res == -1)
+        {
+          throw UPipeClosedException( "Error while receiving data from the socket", errno);
+        }
+      #endif 
       
       if(res == 0)
       {
@@ -179,18 +186,22 @@ int SendData( SocketHandle socket, char* buffer, int buffer_size)
       
     while(total_bytes < buffer_size){
       #ifdef _WINDOWS_C
-      res = send(socket.id, buffer, bytes_left, 0);
-      if(res == SOCKET_ERROR)
-      {
-        throw UPipeClosedException( "Error in sending data through the socket", h_errno);
-      }
+        res = send(socket.id, buffer, bytes_left, 0);
+        if (res == SOCKET_ERROR)
+        {
+          throw UPipeClosedException( "Error in sending data through the socket", h_errno);
+        }
       #else
-      res = send(socket.id, buffer, bytes_left, MSG_NOSIGNAL);
-      if(res == -1)
-      {
-        throw UPipeClosedException( "Error in sending data through the socket");
-      }
-      #endif
+        #if __APPLE__
+          res = send(socket.id, buffer, bytes_left, SO_NOSIGPIPE);
+        #else
+          res = send(socket.id, buffer, bytes_left, MSG_NOSIGNAL);
+        #endif
+        if (res == -1)
+        {
+          throw UPipeClosedException( "Error in sending data through the socket", errno);
+        }
+      #endif 
 
       total_bytes += res;
       buffer += res;
