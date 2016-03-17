@@ -1,9 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyDragonfly", "PyDragonfly.vcproj", "{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyDragonfly", "PyDragonfly.vcxproj", "{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dragonfly_Definitions", "Dragonfly_Definitions.vcproj", "{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dragonfly_Definitions", "Dragonfly_Definitions.vcxproj", "{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

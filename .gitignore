@@ -34,3 +34,8 @@ lang/python/PyDragonfly.py
 lang/python/PyDragonfly_wrap.cxx
 lang/python/Dragonfly_Definitions.py
 lang/python/dragonfly_wrap.cxx
+lang/dot_net/*.metagen
+lang/dot_net/Template
+lang/python/Backup
+lang/python/*.htm
+lang/python/*.sdf
