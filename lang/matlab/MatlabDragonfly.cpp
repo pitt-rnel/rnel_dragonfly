@@ -37,10 +37,10 @@ extern "C" {
   #define MAX_HOST_ADDR_LENGTH 256
 
   void mexFunction(
-	int num_output_args,        // Number of left hand side (output) arguments
-	mxArray *output_arg[],      // Array of left hand side arguments
-	int num_input_args,         // Number of right hand side (input) arguments
-	const mxArray *input_arg[]) // Array of right hand side arguments
+      int num_output_args,        // Number of left hand side (output) arguments
+      mxArray *output_arg[],      // Array of left hand side arguments
+      int num_input_args,         // Number of right hand side (input) arguments
+      const mxArray *input_arg[]) // Array of right hand side arguments
   {
     int opcode;
     
@@ -66,6 +66,8 @@ extern "C" {
     bool try_again;
     double begin_time, end_time, elapsed_time;
 
+    int use_time_card;
+
     try {
       if ( num_input_args < 1 ) {
         Error( "MatlabDragonfly takes at least 1 argument!");
@@ -81,7 +83,7 @@ extern "C" {
 
         case CONNECT_TO_MMM:
 
-          int use_time_card = 0;            
+          use_time_card = 0;            
           if ( num_input_args < 4 )  
             Error( "incorrect number of arguments");
           else if ( num_input_args > 4 )

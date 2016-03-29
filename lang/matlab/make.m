@@ -6,6 +6,10 @@
 %          calls need to be wrapped to use the Matlab memory manager (see mex_malloc.c and mex_malloc.cpp in src/core)
 %
 % MV 4/25/2011
+%
+% modified by:
+% Max Novelli (man8@pitt.edu), 2016/03/22
+%
 
 if( ~ispc && ~isunix)
     error( 'Unsupported platform');
@@ -48,9 +52,10 @@ elseif (isunix)
             disp('No viable gcc compiler')
             return
         end
+        %'-DUSE_LINUX -DCpp11 -v CPPLIB_DIR=''/usr/lib/gcc/x86_64-linux-gnu/4.8/libstdc++.so'' -v GCC=''' gcc(1:end-1) ''' '];
         options = [ ...
-            options ....
-            '-DUSE_LINUX -DCpp11 -v CPPLIB_DIR=''/usr/lib/gcc/x86_64-linux-gnu/4.7/libstdc++.so'' -v GCC=''' gcc(1:end-1) ''' '];
+            options ...
+            '-DUSE_LINUX -DCpp11 -v GCC=''' gcc(1:end-1) ''' '];
     end %if
 end %if
 

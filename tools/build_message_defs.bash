@@ -8,11 +8,14 @@
 # header file is the first input, or at least we hope so
 hfile=$1
 
-# set temporarly correct path to dragonfly
-export DRAGONFLY=`cd ../..;pwd`
-
 # get folder where tools are located
-TOOLS_DIR=`cd ../../tools;pwd`
+TOOLS_DIR=`dirname $0`
+echo "Dragonfly tools folder : ${TOOLS_DIR}"
+
+# set temporarly correct path to dragonfly
+export DRAGONFLY=`cd ${TOOLS_DIR}/..;pwd`
+echo "Dragonfly base folder : $DRAGONFLY"
+
 
 # call python script to create .py message definitions module
 echo "Generating Python module..."
