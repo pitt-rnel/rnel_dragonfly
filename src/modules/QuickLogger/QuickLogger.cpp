@@ -59,6 +59,8 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 		CMessage M;
 		MDF_SAVE_MESSAGE_LOG FilenameData;
 		char Filename[MAX_LOGGER_FILENAME_LENGTH+1];
+                time_t ltime;
+                struct tm *tm;
 
 		// Get connected
 		int logger_status = 1;
@@ -81,7 +83,7 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 		// Do logging
 		try
 		{
-			// Display the size of pre-allocated buffers
+                        // broadcast quicklogger status
 			Status( (MyCString) "Pre-allocated space for " + _MessageBufrr.GetNumPreallocMessages() + " messages");
 			Status( (MyCString) "Pre-allocated space for " + _MessageBufrr.GetNumPreallocDataBytes() + " data bytes");
 
@@ -89,10 +91,25 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 			while( 1) {
 				ReadMessage( &M);
 				//Status( (MyCString) "Received Message (msg_type = " + M.msg_type + ")");
+                                // save message in buffer
 				bool saved = _MessageBufrr.SaveMessage( &M);
 				if( !saved) {
-					Status( "Message buffer was full, saving log to QuickLoggerDump.bin");
-					_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+					// message not saved because buffer was full
+       					// get current time
+                                        ltime=time(NULL);
+                                        tm=localtime(&ltime);
+					// define dump file name : QuickLogger.Dump.<ts>,bin
+                                        sprintf( \ 
+                                          Filename, \
+                                          "QuickLogger.Dump.%04d%02d%02d%02d%02d%02d.bin", \
+                                          tm->tm_year+1900, \
+                                          tm->tm_mon, \
+                                          tm->tm_mday, \
+                                          tm->tm_hour, \
+                                          tm->tm_min, \
+                                          tm->tm_sec);
+					Status( (MyCString) "Message buffer was full, saving log to " + Filename );
+					_MessageBufrr.SaveDatafile( Filename );
 					_MessageBufrr.ClearBuffer( );
 					Status( "Log saved, message buffer has been reset");
 					// Save the message again to the now cleared buffer
@@ -150,7 +167,7 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 void CQuickLogger::Status(const MyCString& msg)
 {
 	TRY {
-		//std::cout << msg.GetContent() << std::endl;
+		std::cout << msg.GetContent() << std::endl;
 		CMessage S( MT_DEBUG_TEXT, msg.GetContent(), msg.GetLen());
 		SendMessage( &S);
 	} CATCH_and_THROW( "void CQuickLogger::Status(const MyCString& msg)");

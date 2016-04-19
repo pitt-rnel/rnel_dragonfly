@@ -28,8 +28,9 @@ function make()
                 return
             end
             % find correct libstdc library
-            [res, libstdc] = system(['locate libstdc++.so | grep gcc | grep ' gccver]);
-            options = [options '-DUSE_LINUX -DC++11 -v CPPLIB_DIR=''' libstdc  ''' -v GCC=''' gcc(1:end-1) ''' '];
+            %[res, libstdc] = system(['locate libstdc++.so | grep gcc | grep ' gccver]);
+            %options = [options '-DUSE_LINUX -DC++11 -v CPPLIB_DIR=''' libstdc(1:end-1)  ''' -v GCC=''' gcc(1:end-1) ''' '];
+            options = [options '-DUSE_LINUX -DCpp11 -v GCC=''' gcc(1:end-1) ''' '];
         end %if
     end %if
 
