@@ -99,7 +99,7 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
                                         ltime=time(NULL);
                                         tm=localtime(&ltime);
 					// define dump file name : QuickLogger.Dump.<ts>,bin
-                                        sprintf( \ 
+                                        sprintf( \
                                           Filename, \
                                           "QuickLogger.Dump.%04d%02d%02d%02d%02d%02d.bin", \
                                           tm->tm_year+1900, \
