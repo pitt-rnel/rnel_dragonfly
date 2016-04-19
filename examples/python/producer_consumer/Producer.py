@@ -26,6 +26,7 @@ if __name__ == "__main__":
         mod.SendMessage(out_msg)
 
         print "Sent message ", out_msg.GetHeader().msg_type
+        print "  Data = [a: %d, b: %d, x: %f]" % (data.a, data.b, data.x)
         
         a += 1
         
