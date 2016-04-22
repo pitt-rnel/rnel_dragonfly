@@ -16,10 +16,8 @@
    ----------------------------------------------------------------------------*/
 // Default size of message buffers to pre-allocate
 // (can be overridden by command-line arguments)
-//#define QL_NUM_PREALLOC_MESSAGES   1000000   // 1,000,000 messages
-//#define QL_NUM_PREALLOC_DATABYTES  1000000000 // 1GB of data
-#define QL_NUM_PREALLOC_MESSAGES   100   // 100 messages
-#define QL_NUM_PREALLOC_DATABYTES  10000 // 10K of data
+#define QL_NUM_PREALLOC_MESSAGES   1000000   // 1,000,000 messages
+#define QL_NUM_PREALLOC_DATABYTES  1000000000 // 1GB of data
 
 /* ----------------------------------------------------------------------------
    |                       QUICK Logger MODULE CODE                             |
