@@ -9,7 +9,7 @@ MID_CONSUMER = 11
 
 if __name__ == "__main__":
     mod = PyDragonfly.Dragonfly_Module(MID_CONSUMER, 0)
-    mod.ConnectToMMM("localhost:7111")
+    mod.ConnectToMMM("192.168.0.246:7111")
     mod.Subscribe(mdefs.MT_TEST_DATA)
     
     print "Consumer running...\n"

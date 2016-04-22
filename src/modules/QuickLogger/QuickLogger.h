@@ -16,8 +16,10 @@
    ----------------------------------------------------------------------------*/
 // Default size of message buffers to pre-allocate
 // (can be overridden by command-line arguments)
-#define QL_NUM_PREALLOC_MESSAGES   100000   // 100,000 messages
-#define QL_NUM_PREALLOC_DATABYTES  40000000 // 40 MB of data, should be enough for a few minutes
+//#define QL_NUM_PREALLOC_MESSAGES   1000000   // 1,000,000 messages
+//#define QL_NUM_PREALLOC_DATABYTES  1000000000 // 1GB of data
+#define QL_NUM_PREALLOC_MESSAGES   100   // 100 messages
+#define QL_NUM_PREALLOC_DATABYTES  10000 // 10K of data
 
 /* ----------------------------------------------------------------------------
    |                       QUICK Logger MODULE CODE                             |
@@ -25,15 +27,18 @@
 
 class CQuickLogger : public Dragonfly_Module
 {
-private:
-	CMessageBufferer _MessageBufrr;
-	bool _logging;
-public:
-	CQuickLogger();
-	~CQuickLogger();
+  private:
+    CMessageBufferer _MessageBufrr;
+    bool _logging;
 
-	void MainFunction( char *cmd_line_options);
+  public:
+    CQuickLogger();
+    ~CQuickLogger();
 
-private:
-	void Status(const MyCString& msg);
+    void MainFunction( char *cmd_line_options);
+
+  private:
+    void Status(const MyCString& msg);
+    void DumpBuffer( char *Filename);
+    void AutoDumpBuffer();
 };

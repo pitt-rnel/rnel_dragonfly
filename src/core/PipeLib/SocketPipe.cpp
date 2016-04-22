@@ -60,11 +60,12 @@ SocketHandle CreateSocket( char *host_addr, short port_no)
 
     // Create a TCP/IP stream socket
     #ifdef _WINDOWS_C
-    theSocket.id = socket(AF_INET,        // Address family
-                 SOCK_STREAM,     // Socket type
-                 IPPROTO_TCP);    // Protocol -> IPPROTO_TCP ==6
+      theSocket.id = socket(
+        AF_INET,         // Address family
+        SOCK_STREAM,     // Socket type
+        IPPROTO_TCP);    // Protocol -> IPPROTO_TCP ==6
     #else
-    theSocket.id = socket (AF_INET, SOCK_STREAM, 0);
+      theSocket.id = socket (AF_INET, SOCK_STREAM, 0);
     #endif
     
     #ifdef _WINDOWS_C
@@ -79,9 +80,9 @@ SocketHandle CreateSocket( char *host_addr, short port_no)
     // Fill in the address structure
     memset( saServer, 0, sizeof(*saServer));
     saServer->sin_family = AF_INET;
-    if( strlen( host_addr) > 0) { // If host name or IP specified, then use that specific address
+    if ( strlen( host_addr) > 0) { // If host name or IP specified, then use that specific address
       hp = gethostbyname( host_addr);
-      if( hp == NULL) {
+      if ( hp == NULL) {
         MyCString ErrMsg( "Cannot get host IP for ");
         ErrMsg += host_addr;
         throw UPipeException( ErrMsg);
@@ -156,7 +157,7 @@ int RecvData( SocketHandle socket, char* buffer, int buffer_size)
         {
           throw UPipeClosedException( "Error while receiving data from the socket", errno);
         }
-      #endif
+      #endif 
       
       if(res == 0)
       {
@@ -200,7 +201,7 @@ int SendData( SocketHandle socket, char* buffer, int buffer_size)
         {
           throw UPipeClosedException( "Error in sending data through the socket", errno);
         }
-      #endif
+      #endif 
 
       total_bytes += res;
       buffer += res;

@@ -14,9 +14,9 @@ unix {
 }
 
 win32 {
-	DEFINES += USE_WINDOWS
-	TEMPLATE = vcapp
-    CONFIG += console
+  DEFINES += USE_WINDOWS
+  TEMPLATE = vcapp
+  CONFIG += console
 }
 
 
