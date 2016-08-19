@@ -5,6 +5,10 @@
 #include "bit_operations.h"
 #include "Debug.h"
 
+// from RP3 RTMA (for timing message)
+#include <sys/timeb.h>
+#include <time.h>
+
 #ifdef _UNIX_C
 	#include <pthread.h>
 	#include <limits.h> //where PIPE_BUF is located
@@ -235,6 +239,13 @@ private:
 	CSubscriberList m_EmptySubscriberList;
 	MyCString       m_Version;
 
+	// members for timing message, adapted from RP3 RTMA
+	unsigned short  m_MessageCounts[MAX_MESSAGE_TYPES];
+	int				m_ModulePIDs[MAX_MODULES];
+	time_t  m_LastMessageCount;
+	unsigned short  m_LastMessageCountmsec;
+	struct _timeb timebuffer;
+
 	MODULE_ID GetDynamicModuleId()
 	{
 		for(MODULE_ID id=0; id < (MAX_MODULES - DYN_MOD_ID_START); id++)
@@ -253,6 +264,10 @@ private:
 		return 0;
 	}
 	
+	void
+	SendMessageTiming();
+	// Sends timing information to subscribed modules and resets the counter (from RP3 RTMA)
+
 	void
 	HandleData( UPipe *pClientPipe);
 	// Override of abstract base class method. Gets called whenever data is ready on any input pipe.

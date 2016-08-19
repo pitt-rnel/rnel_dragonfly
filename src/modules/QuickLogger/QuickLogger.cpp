@@ -77,6 +77,7 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
     if( SetMyPriority(NORMAL_PRIORITY_CLASS) == 0) 
       throw MyCException( "SetMyPriority failed");
     SendSignal( MT_LM_READY);
+	SendModuleReady(); //just so we have the PID (from RP3 RTMA)
     
     printf("QuickLogger connected\n\n");
   

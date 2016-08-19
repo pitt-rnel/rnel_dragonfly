@@ -251,5 +251,11 @@ typedef struct {
   double time[MAX_TIMING_TEST_TIME_POINTS];
 } MDF_TIMING_TEST;
 
+#define MT_TIMING_MESSAGE		80
+typedef struct {
+	unsigned short timing[MAX_MESSAGE_TYPES];
+	int ModulePID[MAX_MODULES]; //0 if not connected
+	double send_time;
+} MDF_TIMING_MESSAGE;
 
 //#endif //_DRAGONFLY_TYPES_H_
