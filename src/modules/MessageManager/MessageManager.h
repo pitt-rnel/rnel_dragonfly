@@ -10,29 +10,29 @@
 #include <time.h>
 
 #ifdef _UNIX_C
-	#include <pthread.h>
-	#include <limits.h> //where PIPE_BUF is located
+    #include <pthread.h>
+    #include <limits.h> //where PIPE_BUF is located
 #endif
 
 class CModuleRecord
 {
 public:
-	MODULE_ID   ModuleID;
-	UPipe       *pModulePipe;
-	short       LoggerStatus;
-	short		DaemonStatus;
+    MODULE_ID  	ModuleID;
+    UPipe       *pModulePipe;
+    short       LoggerStatus;
+    short       DaemonStatus;
 	
-	CModuleRecord( ) {
-		Reset();
-	}
+    CModuleRecord( ) {
+        Reset();
+    }
 
-	void
-	Reset( void) {
-		ModuleID     = -1;
-		pModulePipe  = NULL;
-		LoggerStatus = 0;
-		DaemonStatus = 0;
-	}
+    void
+    Reset( void) {
+        ModuleID     = -1;
+        pModulePipe  = NULL;
+        LoggerStatus = 0;
+        DaemonStatus = 0;
+   }
 };
 
 class CListItem
@@ -233,7 +233,7 @@ public:
 	MainLoop( char *cmd_line_options);
 
 private:
-	MODULE_ID		m_NextDynamicModIdOffset;
+	MODULE_ID       m_NextDynamicModIdOffset;
 	CModuleRecord   m_ConnectedModules[MAX_MODULES];
 	CSubscriberList m_SubscribersToMessageType[MAX_MESSAGE_TYPES];
 	CSubscriberList m_EmptySubscriberList;
@@ -241,10 +241,14 @@ private:
 
 	// members for timing message, adapted from RP3 RTMA
 	unsigned short  m_MessageCounts[MAX_MESSAGE_TYPES];
-	int				m_ModulePIDs[MAX_MODULES];
-	time_t  m_LastMessageCount;
+	int             m_ModulePIDs[MAX_MODULES];
+	time_t          m_LastMessageCount;
 	unsigned short  m_LastMessageCountmsec;
-	struct _timeb timebuffer;
+        #ifdef __unix__
+            struct timeb timebuffer;
+        #else
+	    struct _timeb   timebuffer;
+        #endif
 
 	MODULE_ID GetDynamicModuleId()
 	{

@@ -47,7 +47,11 @@ CMessageManager::CMessageManager( )
   m_NextDynamicModIdOffset = 0;
 
   // from RP3 RTMA (for timing message)
-  _ftime(&timebuffer); // C4996
+  #ifdef __unix__ 
+      ftime(&timebuffer);
+  #else
+      _ftime(&timebuffer); // C4996
+  #endif
   m_LastMessageCount = timebuffer.time;
   m_LastMessageCountmsec = timebuffer.millitm;
   for (int i = 0; i<MAX_MESSAGE_TYPES; i++)
@@ -175,14 +179,22 @@ CMessageManager::ProcessMessage( CMessage *M, UPipe *pSourcePipe)
   if (M->msg_type>0 && M->msg_type<MAX_MESSAGE_TYPES)
 	  m_MessageCounts[M->msg_type]++;
 
-  _ftime(&timebuffer); // C4996
+  #ifdef __unix__
+    ftime(&timebuffer); // C4996
+  #else
+    _ftime(&timebuffer); // C4996
+  #endif
   time_t t = timebuffer.time;
   unsigned short tmsec = timebuffer.millitm;
 
   if ((t - m_LastMessageCount)>1 || (tmsec - m_LastMessageCountmsec)>900) //time to send out message with timing info
   {
 	  SendMessageTiming();
-	  _ftime(&timebuffer); // C4996
+          #ifdef __unix__
+            ftime(&timebuffer); // C4996
+          #else
+            _ftime(&timebuffer); // C4996
+          #endif
 	  m_LastMessageCount = timebuffer.time;
 	  m_LastMessageCountmsec = timebuffer.millitm;
   }
@@ -851,7 +863,11 @@ CMessageManager::SendMessageTiming() // from RP3 RTMA
 	}
 
 	//add IsConnected stuff here:
-	data.ModulePID[0] = _getpid(); //MM
+        #ifdef __unix__
+	  data.ModulePID[0] = getpid(); //MM
+        #else
+	  data.ModulePID[0] = _getpid(); //MM
+        #endif
 	for (int i = 1; i<MAX_MODULES; i++)
 	{
 		if (ModuleIsConnected(i))
