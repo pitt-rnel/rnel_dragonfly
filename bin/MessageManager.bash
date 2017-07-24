@@ -11,13 +11,13 @@ BIN_DIR=`cd ${BIN_DIR}; pwd; cd - 1>/dev/null`
 echo "Dragonfly bin folder : ${BIN_DIR}"
 
 # find library folder
-LIB_DIR=`cd ../lib; pwd; cd - 1>/dev/null`
+LIB_DIR=`cd ${BIN_DIR}/../lib; pwd; cd - 1>/dev/null`
 echo "Dragonfly lib folder : ${LIB_DIR}"
 
 # starting message manager
-CMD="LD_LIBRARY_PATH=${LIB_DIR} ./MessageManager"
+CMD="LD_LIBRARY_PATH=${LIB_DIR} ${BIN_DIR}/MessageManager"
 echo "Starting Message Manager with command =>${CMD}<="
 echo "-------------------------------------"
 echo ""
-LD_LIBRARY_PATH=${LIB_DIR} ./MessageManager
+LD_LIBRARY_PATH=${LIB_DIR} ${BIN_DIR}/MessageManager
 
