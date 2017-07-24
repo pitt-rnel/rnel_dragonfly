@@ -13,8 +13,10 @@
 #include "Timing.h"
 #include "Dragonfly_types.h"
 #include "internal/UPipe.h"
-#ifdef _WINDOWS_C
-  #include "mbgdevio_import.h"
+#ifdef _USE_MEINBERG
+  #ifdef _WINDOWS_C
+    #include "mbgdevio_import.h"
+  #endif
 #endif
 
 #include <stdio.h>
