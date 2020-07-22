@@ -3,7 +3,7 @@
 // that they may be imported into Python.
 // Andrew S. Whitford 06/09
 
-%module Dragonfly_Definitions
+%module dragonfly_definitions
 %{
 #include "../../include/Dragonfly_types.h"
 %}

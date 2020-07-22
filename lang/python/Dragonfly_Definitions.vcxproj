@@ -22,6 +22,7 @@
     <ProjectGuid>{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}</ProjectGuid>
     <RootNamespace>Dragonfly</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>dragonfly_definitions</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

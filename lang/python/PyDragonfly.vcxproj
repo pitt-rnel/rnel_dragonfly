@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>pydragonfly</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -135,36 +136,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dragonfly_wrap.cxx" />
-    <ClCompile Include="PyDragonfly_wrap.cxx" />
+    <ClCompile Include="pydragonfly_wrap.cxx" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="PyDragonfly.i">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">echo In order to function correctly, please ensure the following environment variables are correctly set:
-echo PYTHON_INCLUDE: %25PYTHON_INCLUDE%25
-echo PYTHON_LIB: %25PYTHON_LIB%25
-echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">echo In order to function correctly, please ensure the following environment variables are correctly set:
-echo PYTHON_INCLUDE: %25PYTHON_INCLUDE%25
-echo PYTHON_LIB: %25PYTHON_LIB%25
-echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
+    <CustomBuild Include="pydragonfly.i">
+      <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">echo In order to function correctly, please ensure the following environment variables are correctly set:
 echo PYTHON_INCLUDE: %PYTHON_INCLUDE%
 echo PYTHON_LIB: %PYTHON_LIB%
 echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
+swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">echo In order to function correctly, please ensure the following environment variables are correctly set:
 echo PYTHON_INCLUDE: %PYTHON_INCLUDE%
 echo PYTHON_LIB: %PYTHON_LIB%
 echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
+swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
     </CustomBuild>
