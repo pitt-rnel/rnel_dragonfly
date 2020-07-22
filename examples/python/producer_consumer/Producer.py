@@ -1,33 +1,35 @@
 #!/usr/bin/python
-import time
-import PyDragonfly
-from PyDragonfly import copy_to_msg
-import message_defs as md
 import sys
+import time
+
+from pydragonfly import DragonflyModule
+import message_defs as md
+
 
 MID_PRODUCER = 10
 
-if __name__ == "__main__":
-    mod = PyDragonfly.Dragonfly_Module(MID_PRODUCER, 0)
-    mod.ConnectToMMM("localhost:7111")
+
+if __name__ == '__main__':
+    mod = DragonflyModule(MID_PRODUCER, 0)
+    mod.connect(mm_ip='localhost:7111')
     
-    print("Producer running")
+    print('Producer running')
 
     a = 0
     run = True
     while run:
-        out_msg = PyDragonfly.CMessage(md.MT_TEST_DATA)
+        msg = md.MDF_TEST_DATA()
+        msg.a = a
+        msg.b = -3
+        msg.x = 1.234
 
-        data = md.MDF_TEST_DATA()
-        data.a = a
-        data.b = -3
-        data.x = 1.234
-        copy_to_msg(data, out_msg)
-        mod.SendMessage(out_msg)
+        mod.send_message(msg_def=msg, msg_type=md.MT_TEST_DATA)
 
-        print("Sent message ", out_msg.GetHeader().msg_type)
-        print("  Data = [a: %d, b: %d, x: %f]" % (data.a, data.b, data.x))
+        print('Sent message ', md.MT_TEST_DATA)
+        print('    Data = [a: %d, b: %d, x: %f]' % (msg.a, msg.b, msg.x))
         
         a += 1
         
         time.sleep(1)
+
+    # DragonflyModule disconnects automatically when destroyed

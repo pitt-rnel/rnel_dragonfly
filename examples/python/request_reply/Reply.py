@@ -1,36 +1,45 @@
 #!/usr/bin/python
 import time
-import PyDragonfly
-from PyDragonfly import copy_from_msg, copy_to_msg, MT_EXIT, MT_KILL
-import message_defs as mdefs
 import sys
+
+from pydragonfly import DragonflyModule, MT_KILL, MT_EXIT
+import message_defs as md
+
 
 MID_REPLY = 10
 
+
 # Note: Reply must be started first
 
-if __name__ == "__main__":
-    mod = PyDragonfly.Dragonfly_Module(MID_REPLY, 0)
-    mod.ConnectToMMM()
-    mod.Subscribe(mdefs.MT_REQUEST_TEST_DATA)
+if __name__ == '__main__':
+    mod = DragonflyModule(MID_REPLY, 0)
+    # default mm_ip=localhost:7111
+    mod.connect()
+    mod.subscribe(md.MT_REQUEST_TEST_DATA)
     
-    print "Reply running...\n"
+    print('Reply running...')
     
+    counter = 1
+
     run = True
     while run:
-        in_msg = PyDragonfly.CMessage()
-        print "Waiting for message"
-        rcv = mod.ReadMessage(in_msg, 1.0)
-        if rcv == 1:
-            print "Received message", in_msg.GetHeader().msg_type
-            out_msg = PyDragonfly.CMessage(mdefs.MT_TEST_DATA)
-            data = mdefs.MDF_TEST_DATA()
-            if in_msg.GetHeader().msg_type == mdefs.MT_REQUEST_TEST_DATA:
-                data.a = -20
-                data.b = 47
-                data.x = 123.456
-                copy_to_msg(data, out_msg)
-                mod.SendMessage(out_msg)
-                print "Sent message", out_msg.GetHeader().msg_type
-            elif in_msg.GetHeader().msg_type in (MT_EXIT, MT_KILL):
-               run = False        
+
+        print('Waiting for message')
+
+        cmsg = mod.read_message(timeout=1)
+        # Non-blocking read, cmsg might be None
+        if cmsg:
+            print('Received message', cmsg.get_header().msg_type)
+
+            if cmsg.get_header().msg_type == md.MT_REQUEST_TEST_DATA:
+                msg = md.MDF_TEST_DATA()
+                msg.a = counter
+                msg.b = 47
+                msg.x = 123.456
+                mod.send_message(msg_def=msg, msg_type=md.MT_TEST_DATA)
+                print('Sent message', md.MT_REQUEST_TEST_DATA)
+
+                counter += 1
+
+            elif cmsg.get_header().msg_type in (MT_EXIT, MT_KILL):
+                run = False
