@@ -11,7 +11,7 @@ if __name__ == "__main__":
     mod = PyDragonfly.Dragonfly_Module(MID_PRODUCER, 0)
     mod.ConnectToMMM("localhost:7111")
     
-    print "Producer running...\n"
+    print("Producer running")
 
     a = 0
     run = True
@@ -25,8 +25,8 @@ if __name__ == "__main__":
         copy_to_msg(data, out_msg)
         mod.SendMessage(out_msg)
 
-        print "Sent message ", out_msg.GetHeader().msg_type
-        print "  Data = [a: %d, b: %d, x: %f]" % (data.a, data.b, data.x)
+        print("Sent message ", out_msg.GetHeader().msg_type)
+        print("  Data = [a: %d, b: %d, x: %f]" % (data.a, data.b, data.x))
         
         a += 1
         

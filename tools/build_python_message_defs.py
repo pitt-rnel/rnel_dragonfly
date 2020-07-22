@@ -22,7 +22,8 @@ if __name__ == "__main__":
         sp.call(['xml2py', '-o', out_file, xml_file])
 
     elif os_name == "Windows":
-        ctypesgen_path = os.environ['CTYPESGEN'] + '\ctypesgen.py'
+        ctypesgen_path = os.environ['CTYPESGEN'] + '\\run.py'
         output_file = os.path.join(base_dir, filename_root) + '.py'
-        sp.call(['python', ctypesgen_path, '--includedir="../include"', '-a', '-o', output_file, input_file])
+        python_exe = os.environ['PYTHON_BASE'] + '\\Python.exe'
+        sp.call([python_exe, ctypesgen_path, '--includedir="..\\include"', '-a', '-o', output_file, input_file])
         

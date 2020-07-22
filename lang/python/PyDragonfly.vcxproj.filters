@@ -18,6 +18,9 @@
     <ClCompile Include="PyDragonfly_wrap.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dragonfly_wrap.cxx">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="PyDragonfly.i" />
