@@ -26,6 +26,7 @@
 *.so
 *.so.*
 obj/*
+.vs/
 Debug/
 Release/
 examples/cs/*/obj/*
