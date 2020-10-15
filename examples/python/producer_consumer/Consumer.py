@@ -1,8 +1,5 @@
 #!/usr/bin/python
-import sys
-import time
-
-from pydragonfly import DragonflyModule
+import pydragonfly as df
 import message_defs as md
 
 
@@ -10,24 +7,29 @@ MID_CONSUMER = 11
 
 
 if __name__ == '__main__':
-    mod = DragonflyModule(MID_CONSUMER, 0)
-    mod.connect(mm_ip='localhost:7111')
-    mod.subscribe(md.MT_TEST_DATA)
+    mod = df.Dragonfly_Module(MID_CONSUMER, 0)
+    
+    # Connect to message manager running on local machine
+    mod.ConnectToMMM('localhost:7111')
+
+    # Subscribe to TEST_DATA message types
+    mod.Subscribe(md.MT_TEST_DATA)
     
     print('Consumer running...')
     
     while (1):
+
         # Blocking read.
-        # Use timeout parameter in method if you want to timeout.
-        # Check if cmsg is None if using a timeout
-        cmsg = mod.read_message(timeout=-1)
+        # Use timeout parameter in method if you want to timeout (default is blocking).
+        msg = df.CMessage()
+        mod.ReadMessage(msg, timeout=-1)
 
-        # For demonstration. cmsg should never be None if read_message is blocking
-        if cmsg:
-            print('Received message ', cmsg.get_header().msg_type)
+        print('Received message ', msg.GetHeader().msg_type)
 
-            if cmsg.get_header().msg_type == md.MT_TEST_DATA:
-                msg = cmsg.to_msg_def(msg_def_type=md.MDF_TEST_DATA)
-                print('    Data = [a: %d, b: %d, x: %f]' % (msg.a, msg.b, msg.x))
+        # Always check the message type, even if subscribed to one message type
+        if msg.GetHeader().msg_type == md.MT_TEST_DATA:
+            # Now we can get the message data
+            msg_data = md.MDF_TEST_DATA()
+            print('    Data = [a: %d, b: %d, x: %f]' % (msg_data.a, msg_data.b, msg_data.x))
         
-    # DragonflyModule disconnects automatically when destroyed
+    mod.DisconnectFromMMM()

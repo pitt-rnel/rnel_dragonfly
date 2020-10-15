@@ -1,8 +1,7 @@
 #!/usr/bin/python
-import sys
 import time
 
-from pydragonfly import DragonflyModule
+import pydragonfly as df
 import message_defs as md
 
 
@@ -10,26 +9,32 @@ MID_PRODUCER = 10
 
 
 if __name__ == '__main__':
-    mod = DragonflyModule(MID_PRODUCER, 0)
-    mod.connect(mm_ip='localhost:7111')
+    mod = df.Dragonfly_Module(MID_PRODUCER, 0)
+    
+    # Connect to message manager running on local machine
+    mod.ConnectToMMM('localhost:7111')
     
     print('Producer running')
 
     a = 0
     run = True
     while run:
-        msg = md.MDF_TEST_DATA()
-        msg.a = a
-        msg.b = -3
-        msg.x = 1.234
+        out_msg = df.CMessage(md.MT_TEST_DATA)
 
-        mod.send_message(msg_def=msg, msg_type=md.MT_TEST_DATA)
+        data = md.MDF_TEST_DATA()
+        data.a = a
+        data.b = -3
+        data.x = 1.234
+
+        # Set the message data to message and send
+        df.copy_to_msg(data, out_msg)
+        mod.SendMessage(out_msg)
 
         print('Sent message ', md.MT_TEST_DATA)
-        print('    Data = [a: %d, b: %d, x: %f]' % (msg.a, msg.b, msg.x))
+        print('    Data = [a: %d, b: %d, x: %f]' % (data.a, data.b, data.x))
         
         a += 1
         
         time.sleep(1)
 
-    # DragonflyModule disconnects automatically when destroyed
+    mod.DisconnectFromMMM()
