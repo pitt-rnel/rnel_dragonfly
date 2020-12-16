@@ -31,9 +31,10 @@ Debug/
 Release/
 examples/cs/*/obj/*
 examples/cpp/CppModule
-lang/python/PyDragonfly.py
-lang/python/PyDragonfly_wrap.cxx
-lang/python/Dragonfly_Definitions.py
+lang/python/pydragonfly.py
+lang/python/pydragonfly_wrap.cxx
+lang/python/dragonfly_definitions.py
+lang/python/dragonfly_types.py
 lang/python/dragonfly_wrap.cxx
 lang/dot_net/*.metagen
 lang/dot_net/Template
