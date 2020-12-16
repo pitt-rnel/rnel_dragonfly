@@ -40,3 +40,8 @@ lang/dot_net/Template
 lang/python/Backup
 lang/python/*.htm
 lang/python/*.sdf
+.qmake.stash
+build/Makefile
+src/*/Makefile
+MessageManager
+QuickLogger
