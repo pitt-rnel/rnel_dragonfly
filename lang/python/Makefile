@@ -4,25 +4,21 @@ SYMBOLS    = -DUSE_LINUX
 GCC        = g++
 CPPFLAGS   = -shared -Wall -Wno-deprecated -pthread -fPIC
 LIBS       = -L${BASE_DIR}/lib -lDragonfly
-PY_INC     = /usr/include/python2.7
-PYTHON     = /usr/bin/python
+PY_VERSION = 3.8
+PY_INC     = /usr/include/python${PY_VERSION}
+PYTHON     = /usr/bin/python${PY_VERSION}
 INCLUDES   = -I${BASE_DIR}/include -I${BASE_DIR}/include/internal
-H2XML      = h2xml
-XML2PY     = xml2py
 
-all:  _PyDragonfly.so Dragonfly_types.py
+all:  _pydragonfly.so dragonfly_types.py
 
-PyDragonfly.py: PyDragonfly.i
-	${SWIG} ${SYMBOLS} ${INCLUDES} -c++ -python PyDragonfly.i
+pydragonfly.py: pydragonfly.i
+	${SWIG} ${SYMBOLS} ${INCLUDES} -c++ -python pydragonfly.i
 
-_PyDragonfly.so:  PyDragonfly.py
-	${GCC} ${CPPFLAGS} ${INCLUDES} ${SYMBOLS} -I${PY_INC} ${LIBS} PyDragonfly_wrap.cxx -o _PyDragonfly.so -lpython2.7 -lDragonfly
+_pydragonfly.so:  pydragonfly.py
+	${GCC} ${CPPFLAGS} ${INCLUDES} ${SYMBOLS} -I${PY_INC} ${LIBS} pydragonfly_wrap.cxx -o _pydragonfly.so -lpython${PY_VERSION} -lDragonfly
 
-Dragonfly_types.xml: ${BASE_DIR}/include/Dragonfly_types.h
-	${H2XML} -c -o Dragonfly_types.xml `pwd`/../../include/Dragonfly_types.h
-
-Dragonfly_types.py: Dragonfly_types.xml
-	${XML2PY} -o Dragonfly_types.py Dragonfly_types.xml
+dragonfly_types.py:
+	${PYTHON} ${CTYPESGEN}/run.py `pwd`/../../include/Dragonfly_types.h -o `pwd`/dragonfly_types.py
 
 clean:
 	rm -f *.so
