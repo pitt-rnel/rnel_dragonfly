@@ -30,6 +30,7 @@ if __name__ == '__main__':
         if msg.GetHeader().msg_type == md.MT_TEST_DATA:
             # Now we can get the message data
             msg_data = md.MDF_TEST_DATA()
+            df.copy_from_msg(msg_data, msg)
             print('    Data = [a: %d, b: %d, x: %f]' % (msg_data.a, msg_data.b, msg_data.x))
         
     mod.DisconnectFromMMM()
