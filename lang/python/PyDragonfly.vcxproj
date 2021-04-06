@@ -135,7 +135,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dragonfly_wrap.cxx" />
     <ClCompile Include="pydragonfly_wrap.cxx" />
   </ItemGroup>
   <ItemGroup>

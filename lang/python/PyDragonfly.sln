@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyDragonfly", "PyDragonfly.vcxproj", "{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dragonfly_Definitions", "Dragonfly_Definitions.vcxproj", "{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pydragonfly", "PyDragonfly.vcxproj", "{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +21,6 @@ Global
 		{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}.Release|Win32.Build.0 = Release|Win32
 		{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}.Release|x64.ActiveCfg = Release|x64
 		{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}.Release|x64.Build.0 = Release|x64
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Debug|Win32.ActiveCfg = Debug|Win32
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Debug|Win32.Build.0 = Debug|Win32
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Debug|x64.ActiveCfg = Debug|x64
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Debug|x64.Build.0 = Debug|x64
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Release|Win32.ActiveCfg = Release|Win32
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Release|Win32.Build.0 = Release|Win32
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Release|x64.ActiveCfg = Release|x64
-		{7D3E8C1A-0C85-482F-9BA7-0BA09FE315AB}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

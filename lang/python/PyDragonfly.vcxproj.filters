@@ -15,14 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dragonfly_wrap.cxx">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="pydragonfly_wrap.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="pydragonfly.i" />
+    <CustomBuild Include="pydragonfly.i" />
   </ItemGroup>
 </Project>
